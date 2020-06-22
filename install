@@ -23,7 +23,7 @@ export CB_GIT_SHORT_COMMIT="$(git log -1 --pretty=%h)"
 [[ $CODEBUILD_WEBHOOK_TRIGGER = pr/* ]] && export CB_PULL_REQUEST_NUMBER=${CODEBUILD_WEBHOOK_TRIGGER#pr/};
 
 export CB_PROJECT=${CODEBUILD_BUILD_ID%:$CODEBUILD_LOG_PATH}
-export CB_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CB_BUILD_ID/view/new
+export CB_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CODEBUILD_BUILD_ID/view/new
 
 echo "==> AWS CodeBuild Extra Environment Variables:"
 echo "==> CI = $CI"
