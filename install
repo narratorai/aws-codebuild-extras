@@ -2,8 +2,6 @@
 
 export CI=true
 
-export CB_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-
 export CB_GIT_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
 if [ "$CB_GIT_BRANCH" = "" ] ; then
   CB_GIT_BRANCH="$(git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }')";
@@ -11,14 +9,13 @@ if [ "$CB_GIT_BRANCH" = "" ] ; then
 fi
 
 export CB_GIT_CLEAN_BRANCH="$(echo $CB_GIT_BRANCH | tr '/' '.')"
-export CB_GIT_ESCAPED_BRANCH="$(echo $CB_GIT_CLEAN_BRANCH | sed -e 's/[]\/$*.^[]/\\\\&/g')"
 export CB_GIT_MESSAGE="$(git log -1 --pretty=%B)"
 export CB_GIT_AUTHOR="$(git log -1 --pretty=%an)"
 export CB_GIT_AUTHOR_EMAIL="$(git log -1 --pretty=%ae)"
 export CB_GIT_COMMIT="$(git log -1 --pretty=%H)"
 export CB_GIT_SHORT_COMMIT="$(git log -1 --pretty=%h)"
-# export CB_GIT_TAG="$(git describe --tags --exact-match 2>/dev/null)"
-# export CB_GIT_MOST_RECENT_TAG="$(git describe --tags --abbrev=0)"
+export CB_GIT_TAG="$(git describe --tags --exact-match 2>/dev/null)"
+export CB_GIT_MOST_RECENT_TAG="$(git describe --tags --abbrev=0)"
 
 [[ $CODEBUILD_WEBHOOK_TRIGGER = pr/* ]] && export CB_PULL_REQUEST_NUMBER=${CODEBUILD_WEBHOOK_TRIGGER#pr/};
 
@@ -27,16 +24,14 @@ export CB_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild
 
 echo "==> AWS CodeBuild Extra Environment Variables:"
 echo "==> CI = $CI"
-echo "==> CB_ACCOUNT_ID = $CB_ACCOUNT_ID"
 echo "==> CB_GIT_AUTHOR = $CB_GIT_AUTHOR"
 echo "==> CB_GIT_AUTHOR_EMAIL = $CB_GIT_AUTHOR_EMAIL"
 echo "==> CB_GIT_BRANCH = $CB_GIT_BRANCH"
 echo "==> CB_GIT_CLEAN_BRANCH = $CB_GIT_CLEAN_BRANCH"
-echo "==> CB_GIT_ESCAPED_BRANCH = $CB_GIT_ESCAPED_BRANCH"
 echo "==> CB_GIT_COMMIT = $CB_GIT_COMMIT"
 echo "==> CB_GIT_SHORT_COMMIT = $CB_GIT_SHORT_COMMIT"
 echo "==> CB_GIT_MESSAGE = $CB_GIT_MESSAGE"
-# echo "==> CB_GIT_TAG = $CB_GIT_TAG"
-# echo "==> CB_GIT_MOST_RECENT_TAG = $CB_GIT_MOST_RECENT_TAG"
+echo "==> CB_GIT_TAG = $CB_GIT_TAG"
+echo "==> CB_GIT_MOST_RECENT_TAG = $CB_GIT_MOST_RECENT_TAG"
 echo "==> CB_PROJECT = $CB_PROJECT"
 echo "==> CB_PULL_REQUEST_NUMBER = $CB_PULL_REQUEST_NUMBER"
